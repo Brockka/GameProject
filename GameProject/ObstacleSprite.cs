@@ -13,6 +13,12 @@ namespace GameProject
     /// </summary>
     public class ObstacleSprite
     {
+        private const float ANIMATION_SPEED = .25f;
+
+        private double animationTimer;
+
+        private bool animated;
+
         private Texture2D atlas;
 
         public Vector2 velocity;
@@ -39,7 +45,7 @@ namespace GameProject
             this.velocity = velocity;
             this.position = position;
             this.graphics = graphics;
-            this.bounds = new BoundingCircle(position + new Vector2(32, 24), 16);
+            this.bounds = new BoundingCircle(position + new Vector2(24, 30), 30);
         }
 
         /// <summary>
@@ -57,8 +63,15 @@ namespace GameProject
         /// <param name="gameTime">The game time</param>
         public void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
-            position += (float)gameTime.ElapsedGameTime.TotalSeconds * velocity * 2;
+            //todo: add your update logic here
+            float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Vector2 xAcceleration = new Vector2(2, 0);
+            Vector2 yAcceleration = new Vector2(0, 2);
+            if (velocity.X > 0) velocity += xAcceleration * t;
+            else velocity -= xAcceleration * t;
+            if (velocity.Y > 0) velocity += yAcceleration * t;
+            else velocity -= yAcceleration * t;
+            position += (float)gameTime.ElapsedGameTime.TotalSeconds * velocity;
 
             if (position.X < graphics.Viewport.X
                 || position.X > graphics.Viewport.Width)
@@ -71,8 +84,8 @@ namespace GameProject
             {
                 velocity.Y *= -1;
             }
-            // Update the bounds
-            bounds.Center = new Vector2(position.X, position.Y);
+            //Update the bounds
+            bounds.Center = new Vector2(position.X + 24, position.Y + 30);
         }
 
         /// <summary>
@@ -82,7 +95,17 @@ namespace GameProject
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(atlas, position, new Rectangle(240, 160, 16, 16), Color.Red, 0, new Vector2(0, 0), 3.0f, SpriteEffects.None, 0);
+            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if(animationTimer > ANIMATION_SPEED)
+            {
+                animationTimer -= ANIMATION_SPEED;
+                if (animated) animated = false;
+                else animated = true;
+                
+            }
+            if (animated) spriteBatch.Draw(atlas, position, new Rectangle(240, 160, 16, 16), Color.Red, 0, new Vector2(0, 0), 3.0f, SpriteEffects.None, 0);
+            else spriteBatch.Draw(atlas, position, new Rectangle(240, 160, 16, 16), Color.LightGoldenrodYellow, 0, new Vector2(0, 0), 2.75f, SpriteEffects.FlipHorizontally, 0);
         }
     }
 }

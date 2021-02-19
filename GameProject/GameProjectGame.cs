@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace GameProject
@@ -9,11 +10,12 @@ namespace GameProject
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SoundEffect deathSound;
 
         private ObstacleSprite[] obstacles;
         private PlayerSprite playerSprite;
         private bool gameOver;
-        private TimeSpan score;
+        private double score;
         private SpriteFont bangers;
 
 
@@ -40,12 +42,12 @@ namespace GameProject
             System.Random random = new System.Random();
 
             playerSprite = new PlayerSprite(GraphicsDevice);
-            obstacles = new ObstacleSprite[15];
-            for (int i = 0; i < 15; i++)
+            obstacles = new ObstacleSprite[10];
+            for (int i = 0; i < 10; i++)
             {
                 Vector2 velocity = new Vector2( (float)random.NextDouble(), (float)random.NextDouble() );
                 velocity.Normalize();
-                velocity *= 100;
+                velocity *= 200;
                 obstacles[i] = new ObstacleSprite(velocity, position, GraphicsDevice);
                 
             }
@@ -62,6 +64,7 @@ namespace GameProject
             playerSprite.LoadContent(Content);
             foreach (var obstacle in obstacles) obstacle.LoadContent(Content);
             bangers = Content.Load<SpriteFont>("bangers");
+            deathSound = Content.Load<SoundEffect>("DeathAudio");
         }
 
         /// <summary>
@@ -81,7 +84,8 @@ namespace GameProject
                     if (obstacle.Bounds.CollidesWith(playerSprite.Bounds))
                     {
                         gameOver = true;
-                        score = gameTime.TotalGameTime;
+                        score = gameTime.TotalGameTime.TotalSeconds;
+                        deathSound.Play();
                     }
                 }
             }
@@ -94,12 +98,13 @@ namespace GameProject
         /// <param name="gameTime">the measured game time</param>
         protected override void Draw(GameTime gameTime)
         {
+
             if (gameOver)
             {
                 GraphicsDevice.Clear(Color.Red);
                 _spriteBatch.Begin();
-                _spriteBatch.DrawString(bangers, "       Game Over!\n     Time Survived:\n" + score.ToString(), 
-                    new Vector2(GraphicsDevice.Viewport.Width / 4, GraphicsDevice.Viewport.Height / 4), Color.White);
+                _spriteBatch.DrawString(bangers, "       Game Over!\nTime Survived: " + (Math.Round(score, 2)).ToString(),
+                    new Vector2(GraphicsDevice.Viewport.Width / 3, GraphicsDevice.Viewport.Height / 3), Color.White);
                 _spriteBatch.End();
                 base.Draw(gameTime);
             }
@@ -110,7 +115,8 @@ namespace GameProject
                 _spriteBatch.Begin();
                 foreach (var obstacle in obstacles) obstacle.Draw(gameTime, _spriteBatch);
                 playerSprite.Draw(gameTime, _spriteBatch);
-                _spriteBatch.DrawString(bangers, $"{gameTime.TotalGameTime:c}", new Vector2(2, 2), Color.White);
+                _spriteBatch.DrawString(bangers, (Math.Round(gameTime.TotalGameTime.TotalSeconds, 2)).ToString(),
+                    new Vector2(2, 2), Color.White);
                 _spriteBatch.End();
 
                 base.Draw(gameTime);

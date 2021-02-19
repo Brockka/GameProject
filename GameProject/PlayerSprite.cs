@@ -17,6 +17,14 @@ namespace GameProject
         private KeyboardState keyboardState;
 
         private Texture2D texture;
+        private Texture2D texture1;
+        private Texture2D texture2;
+
+        private int animationFrame;
+
+        private const float ANIMATION_SPEED = .25f;
+
+        private double animationTimer;
 
         private bool flipped;
 
@@ -47,6 +55,8 @@ namespace GameProject
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("slime");
+            texture1 = content.Load<Texture2D>("slime1");
+            texture2 = content.Load<Texture2D>("slime2");
         }
 
         /// <summary>
@@ -95,7 +105,18 @@ namespace GameProject
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            spriteBatch.Draw(texture, position, null, Color.Red, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
+            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (animationTimer > ANIMATION_SPEED)
+            {
+                animationFrame++;
+                if (animationFrame > 3) animationFrame = 0;
+                animationTimer -= ANIMATION_SPEED;
+                
+            }         
+            if(animationFrame == 0)spriteBatch.Draw(texture, position, null, Color.Red, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
+            else if(animationFrame == 1)spriteBatch.Draw(texture2, position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
+            else spriteBatch.Draw(texture1, position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
         }
     }
 }
