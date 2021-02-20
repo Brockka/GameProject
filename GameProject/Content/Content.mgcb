@@ -20,6 +20,12 @@
 /processorParam:TextureFormat=Compressed
 /build:bangers.spritefont
 
+#begin Bauchamp - 103 old school casserole beat.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Bauchamp - 103 old school casserole beat.mp3
+
 #begin colored_packed.png
 /importer:TextureImporter
 /processor:TextureProcessor

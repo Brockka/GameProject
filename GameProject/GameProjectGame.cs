@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System;
 
 namespace GameProject
@@ -17,6 +18,7 @@ namespace GameProject
         private bool gameOver;
         private double score;
         private SpriteFont bangers;
+        private Song backgroundMusic;
 
 
         /// <summary>
@@ -27,7 +29,6 @@ namespace GameProject
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            gameOver = false;
         }
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace GameProject
         /// </summary>
         protected override void Initialize()
         {
+            gameOver = false;
             Vector2 position = new Vector2(
                 GraphicsDevice.Viewport.Width / 2,
                 GraphicsDevice.Viewport.Height / 2
@@ -65,6 +67,9 @@ namespace GameProject
             foreach (var obstacle in obstacles) obstacle.LoadContent(Content);
             bangers = Content.Load<SpriteFont>("bangers");
             deathSound = Content.Load<SoundEffect>("DeathAudio");
+            backgroundMusic = Content.Load<Song>("Bauchamp - 103 old school casserole beat");
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(backgroundMusic);
         }
 
         /// <summary>
@@ -86,6 +91,7 @@ namespace GameProject
                         gameOver = true;
                         score = gameTime.TotalGameTime.TotalSeconds;
                         deathSound.Play();
+                        MediaPlayer.Pause();
                     }
                 }
             }
