@@ -67,7 +67,7 @@ namespace GameProject.Screens
             foreach (var obstacle in obstacles) obstacle.LoadContent(_content);
             bangers = _content.Load<SpriteFont>("bangers");
             deathSound = _content.Load<SoundEffect>("DeathAudio");
-            backgroundMusic = _content.Load<Song>("Bauchamp - 103 old school casserole beat");
+            backgroundMusic = _content.Load<Song>("BackgroundMusic");
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(backgroundMusic);
             _timer = new Stopwatch();
