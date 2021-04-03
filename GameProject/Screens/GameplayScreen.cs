@@ -14,6 +14,7 @@ namespace GameProject.Screens
     // This screen implements the actual game logic. 
     public class GameplayScreen : GameScreen
     {
+        private const int OBSTACLE_COUNT = 10;
         private ContentManager _content;
 
         private SoundEffect deathSound;
@@ -53,13 +54,13 @@ namespace GameProject.Screens
             System.Random random = new System.Random();
 
             playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice);
-            obstacles = new ObstacleSprite[10];
-            for (int i = 0; i < 10; i++)
+            obstacles = new ObstacleSprite[OBSTACLE_COUNT];
+            for (int i = 0; i < OBSTACLE_COUNT; i++)
             {
                 Vector2 velocity = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
                 velocity.Normalize();
                 velocity *= 200;
-                obstacles[i] = new ObstacleSprite(velocity, position, ScreenManager.GraphicsDevice);
+                obstacles[i] = new ObstacleSprite(velocity, position, ScreenManager.GraphicsDevice, ScreenManager.Game);
 
             }
 
@@ -114,6 +115,7 @@ namespace GameProject.Screens
                         {
                         score = _timer.Elapsed.TotalSeconds;
                         _timer.Reset();
+                        for (int i = OBSTACLE_COUNT; i > 0 ; i--) ScreenManager.Game.Components.RemoveAt(i);
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
                         ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);              

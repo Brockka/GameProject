@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace GameProject.ParticleSystemExample
+namespace GameProject.ParticleSystem
 {
     /// <summary>
     /// A static class providing helper methods for generating 

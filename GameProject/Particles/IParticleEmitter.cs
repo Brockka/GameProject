@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace GameProject.ParticleSystemExample
+namespace GameProject.ParticleSystem
 {
     public interface IParticleEmitter
     {

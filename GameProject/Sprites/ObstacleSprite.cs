@@ -5,13 +5,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using GameProject.Collisions;
+using GameProject.ParticleSystem;
 
 namespace GameProject
 {
     /// <summary>
     /// A class representing the obstacle sprites
     /// </summary>
-    public class ObstacleSprite
+    public class ObstacleSprite : IParticleEmitter
     {
         private const float ANIMATION_SPEED = .25f;
 
@@ -21,13 +22,15 @@ namespace GameProject
 
         private Texture2D atlas;
 
-        public Vector2 velocity;
+        public Vector2 Velocity { get; set; }
 
-        private Vector2 position;
+        public Vector2 Position { get; set; }
 
         private GraphicsDevice graphics;
 
         private BoundingCircle bounds;
+
+        private FireParticleSystem fire;
 
         /// <summary>
         //  Bounding volume of the sprite
@@ -40,12 +43,14 @@ namespace GameProject
         /// <param name="velocity">Initial velocity of obstacle</param>
         /// <param name="position">Initial position of obstacle</param>
         /// <param name="graphics">The graphics device</param>
-        public ObstacleSprite(Vector2 velocity, Vector2 position, GraphicsDevice graphics)
+        public ObstacleSprite(Vector2 velocity, Vector2 position, GraphicsDevice graphics, Game game)
         {
-            this.velocity = velocity;
-            this.position = position;
+            this.Velocity = velocity;
+            this.Position = position;
             this.graphics = graphics;
             this.bounds = new BoundingCircle(position + new Vector2(24, 30), 30);
+            fire = new FireParticleSystem(game, this);
+            game.Components.Add(fire);
         }
 
         /// <summary>
@@ -67,25 +72,25 @@ namespace GameProject
             float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector2 xAcceleration = new Vector2(2, 0);
             Vector2 yAcceleration = new Vector2(0, 2);
-            if (velocity.X > 0) velocity += xAcceleration * t;
-            else velocity -= xAcceleration * t;
-            if (velocity.Y > 0) velocity += yAcceleration * t;
-            else velocity -= yAcceleration * t;
-            position += (float)gameTime.ElapsedGameTime.TotalSeconds * velocity;
+            if (Velocity.X > 0) Velocity += xAcceleration * t;
+            else Velocity -= xAcceleration * t;
+            if (Velocity.Y > 0) Velocity += yAcceleration * t;
+            else Velocity -= yAcceleration * t;
+            Position += (float)gameTime.ElapsedGameTime.TotalSeconds * Velocity;
 
-            if (position.X < graphics.Viewport.X
-                || position.X > graphics.Viewport.Width)
+            if (Position.X < graphics.Viewport.X
+                || Position.X > graphics.Viewport.Width)
             {
-                velocity.X *= -1;
+                Velocity = new Vector2(-Velocity.X, Velocity.Y);
             }
 
-            if (position.Y < graphics.Viewport.Y
-                || position.Y > graphics.Viewport.Height)
+            if (Position.Y < graphics.Viewport.Y
+                || Position.Y > graphics.Viewport.Height)
             {
-                velocity.Y *= -1;
+                Velocity = new Vector2(Velocity.X, -Velocity.Y);
             }
             //Update the bounds
-            bounds.Center = new Vector2(position.X + 24, position.Y + 30);
+            bounds.Center = new Vector2(Position.X + 24, Position.Y + 30);
         }
 
         /// <summary>
@@ -104,8 +109,8 @@ namespace GameProject
                 else animated = true;
                 
             }
-            if (animated) spriteBatch.Draw(atlas, position, new Rectangle(240, 160, 16, 16), Color.Red, 0, new Vector2(0, 0), 3.0f, SpriteEffects.None, 0);
-            else spriteBatch.Draw(atlas, position, new Rectangle(240, 160, 16, 16), Color.LightGoldenrodYellow, 0, new Vector2(0, 0), 2.75f, SpriteEffects.FlipHorizontally, 0);
+            if (animated) spriteBatch.Draw(atlas, Position, new Rectangle(240, 160, 16, 16), Color.Red, 0, new Vector2(0, 0), 3.0f, SpriteEffects.None, 0);
+            else spriteBatch.Draw(atlas, Position, new Rectangle(240, 160, 16, 16), Color.LightGoldenrodYellow, 0, new Vector2(0, 0), 2.75f, SpriteEffects.FlipHorizontally, 0);
         }
     }
 }
