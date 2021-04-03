@@ -38,18 +38,6 @@
 /processorParam:TextureFormat=Color
 /build:blank.png
 
-#begin colored_packed.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=71,45,60,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:colored_packed.png
-
 #begin DeathAudio.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -91,6 +79,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:MenuBackground.png
+
+#begin Obstacle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=0,0,0,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Obstacle.png
 
 #begin slime.png
 /importer:TextureImporter

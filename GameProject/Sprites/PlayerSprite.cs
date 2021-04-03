@@ -30,7 +30,7 @@ namespace GameProject
 
         private Vector2 position = new Vector2(200, 200);
 
-        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200 - 16, 200 - 16), 32, 32);
+        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200, 200), 55, 60);
 
         private GraphicsDevice graphics;
 

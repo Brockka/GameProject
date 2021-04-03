@@ -14,12 +14,6 @@ namespace GameProject
     /// </summary>
     public class ObstacleSprite : IParticleEmitter
     {
-        private const float ANIMATION_SPEED = .25f;
-
-        private double animationTimer;
-
-        private bool animated;
-
         private Texture2D atlas;
 
         public Vector2 Velocity { get; set; }
@@ -48,7 +42,7 @@ namespace GameProject
             this.Velocity = velocity;
             this.Position = position;
             this.graphics = graphics;
-            this.bounds = new BoundingCircle(position + new Vector2(24, 30), 30);
+            this.bounds = new BoundingCircle(position + new Vector2(16, 16), 20);
             fire = new FireParticleSystem(game, this);
             game.Components.Add(fire);
         }
@@ -59,7 +53,7 @@ namespace GameProject
         /// <param name="content">The ContentManager to load with</param>
         public void LoadContent(ContentManager content)
         {
-            atlas = content.Load<Texture2D>("colored_packed");
+            atlas = content.Load<Texture2D>("Obstacle");
         }
 
         /// <summary>
@@ -100,17 +94,7 @@ namespace GameProject
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
-
-            if(animationTimer > ANIMATION_SPEED)
-            {
-                animationTimer -= ANIMATION_SPEED;
-                if (animated) animated = false;
-                else animated = true;
-                
-            }
-            if (animated) spriteBatch.Draw(atlas, Position, new Rectangle(240, 160, 16, 16), Color.Red, 0, new Vector2(0, 0), 3.0f, SpriteEffects.None, 0);
-            else spriteBatch.Draw(atlas, Position, new Rectangle(240, 160, 16, 16), Color.LightGoldenrodYellow, 0, new Vector2(0, 0), 2.75f, SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.Draw(atlas, Position,null, Color.BlueViolet, 0, new Vector2(0, 0), 2.0f, SpriteEffects.None, 0);
         }
     }
 }

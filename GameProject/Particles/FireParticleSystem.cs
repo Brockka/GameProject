@@ -30,13 +30,13 @@ namespace GameProject.ParticleSystem
         {
             var Velocity = -_emitter.Velocity;
 
-            var acceleration = new Vector2(10, 10);
+            var acceleration = new Vector2(300, 300);
 
-            var scale = RandomHelper.NextFloat(0.05f, 0.10f);
+            var scale = RandomHelper.NextFloat(0.015f, 0.20f);
 
-            var lifetime = RandomHelper.NextFloat(0.1f, 0.15f);
+            var lifetime = RandomHelper.NextFloat(0.05f, 0.1f);
 
-            p.Initialize(where, Velocity, acceleration, Color.BlueViolet, scale: scale, lifetime: lifetime);
+            p.Initialize(where + new Vector2(16,16), Velocity, acceleration, Color.BlueViolet, scale: scale, lifetime: lifetime);
         }
 
         public override void Update(GameTime gameTime)
