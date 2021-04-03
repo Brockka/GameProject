@@ -8,6 +8,7 @@ using GameProject.StateManagement;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System.Diagnostics;
+using GameProject.ParticleSystem;
 
 namespace GameProject.Screens
 {
@@ -46,12 +47,8 @@ namespace GameProject.Screens
         {
             if (this._content == null)
                 this._content = new ContentManager(ScreenManager.Game.Services, "Content");
-            ScreenManager.ToggleSparks();
 
-            Vector2 position = new Vector2(
-                ScreenManager.GraphicsDevice.Viewport.Width / 2,
-                ScreenManager.GraphicsDevice.Viewport.Height / 2
-                );
+            Vector2 position = new Vector2(0,0);
             System.Random random = new System.Random();
 
             playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice);
@@ -117,12 +114,16 @@ namespace GameProject.Screens
                         ScreenManager.ToggleSparks();
                         score = _timer.Elapsed.TotalSeconds;
                         _timer.Reset();
-                        for (int i = OBSTACLE_COUNT+1; i > 1 ; i--) ScreenManager.Game.Components.RemoveAt(i);
+                        for (int i = OBSTACLE_COUNT+2; i > 2 ; i--) ScreenManager.Game.Components.RemoveAt(i);
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
-                        ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);              
+                        ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);
+                        ScreenManager.Flash(playerSprite.Position);
+                        ScreenManager.Flash(playerSprite.Position);
+                        ScreenManager.Flash(playerSprite.Position);
                         deathSound.Play();
-                        MediaPlayer.Pause();                        
+                        MediaPlayer.Pause();
+                        break;
                         }
                     }
                 }

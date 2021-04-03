@@ -25,7 +25,7 @@ namespace GameProject.ParticleSystem
 
         protected override void InitializeParticle(ref Particle p, Vector2 where)
         {
-            p.Initialize(where, Vector2.UnitY * -50, Vector2.Zero, Color.OrangeRed, scale: RandomHelper.NextFloat(0.5f, 1.0f), lifetime: 5);
+            p.Initialize(where, Vector2.UnitY * -500, Vector2.Zero, Color.OrangeRed, scale: RandomHelper.NextFloat(0.5f, 1.0f), lifetime: 1);
         }
 
         public override void Update(GameTime gameTime)

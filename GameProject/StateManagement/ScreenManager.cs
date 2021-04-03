@@ -21,6 +21,7 @@ namespace GameProject.StateManagement
 
         private bool _isInitialized;
 
+        private FlashParticleSystem _flash;
         private SparkParticleSystem _sparks;
 
         /// <summary>
@@ -56,6 +57,8 @@ namespace GameProject.StateManagement
             _isInitialized = true;
             _sparks = new SparkParticleSystem(Game, new Rectangle(-100, 500, 1000, 10));
             Game.Components.Add(_sparks);
+            _flash = new FlashParticleSystem(Game, 20);
+            Game.Components.Add(_flash);
         }
 
         /// <summary>
@@ -199,6 +202,14 @@ namespace GameProject.StateManagement
         {
             if (_sparks.Active) _sparks.Active = false;
             else _sparks.Active = true;
+        }
+        /// <summary>
+        /// Creates a flash
+        /// </summary>
+        /// <param name="position">Where flash is displayed</param>
+        public void Flash(Vector2 position)
+        {
+            _flash.PlaceFlash(position);
         }
     }
 }

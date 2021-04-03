@@ -28,13 +28,14 @@ namespace GameProject.Screens
             _loadingIsSlow = loadingIsSlow;
             _screensToLoad = screensToLoad;
 
-            TransitionOnTime = TimeSpan.FromSeconds(0.5);
+            TransitionOnTime = TimeSpan.FromSeconds(1);
         }
 
         // Activates the loading screen.
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,
                                 PlayerIndex? controllingPlayer, params GameScreen[] screensToLoad)
         {
+            screenManager.ToggleSparks();
             // Tell all the current screens to transition off.
             foreach (var screen in screenManager.GetScreens())
                 screen.ExitScreen();
