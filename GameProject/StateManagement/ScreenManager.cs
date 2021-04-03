@@ -2,8 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
+using GameProject.ParticleSystem;
 
 namespace GameProject.StateManagement
 {
@@ -21,6 +20,8 @@ namespace GameProject.StateManagement
         private readonly InputState _input = new InputState();
 
         private bool _isInitialized;
+
+        private SparkParticleSystem _sparks;
 
         /// <summary>
         /// A SpriteBatch shared by all GameScreens
@@ -53,6 +54,8 @@ namespace GameProject.StateManagement
         {
             base.Initialize();
             _isInitialized = true;
+            _sparks = new SparkParticleSystem(Game, new Rectangle(-100, 500, 1000, 10));
+            Game.Components.Add(_sparks);
         }
 
         /// <summary>
@@ -188,6 +191,14 @@ namespace GameProject.StateManagement
         public bool Activate()
         {
             return false;
+        }
+        /// <summary>
+        /// Toggles the state of sparks
+        /// </summary>
+        public void ToggleSparks()
+        {
+            if (_sparks.Active) _sparks.Active = false;
+            else _sparks.Active = true;
         }
     }
 }

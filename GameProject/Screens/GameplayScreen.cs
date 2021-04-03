@@ -46,6 +46,7 @@ namespace GameProject.Screens
         {
             if (this._content == null)
                 this._content = new ContentManager(ScreenManager.Game.Services, "Content");
+            ScreenManager.ToggleSparks();
 
             Vector2 position = new Vector2(
                 ScreenManager.GraphicsDevice.Viewport.Width / 2,
@@ -113,9 +114,10 @@ namespace GameProject.Screens
                         obstacle.Update(gameTime);
                         if (obstacle.Bounds.CollidesWith(playerSprite.Bounds))
                         {
+                        ScreenManager.ToggleSparks();
                         score = _timer.Elapsed.TotalSeconds;
                         _timer.Reset();
-                        for (int i = OBSTACLE_COUNT; i > 0 ; i--) ScreenManager.Game.Components.RemoveAt(i);
+                        for (int i = OBSTACLE_COUNT+1; i > 1 ; i--) ScreenManager.Game.Components.RemoveAt(i);
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
                         ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);              
