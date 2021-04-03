@@ -20,3 +20,5 @@ Content/explosion.png - created by Nathan Bean for CIS 580, released under publi
 
 Content/explosionBlue.png - modified Content/explosion.png by Brock Kaufmann
 
+Content/ScrollingBackground.png - created by Brock Kaufmann for this project
+

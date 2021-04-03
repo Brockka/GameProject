@@ -114,9 +114,9 @@ namespace GameProject
                 animationTimer -= ANIMATION_SPEED;
                 
             }         
-            if(animationFrame == 0)spriteBatch.Draw(texture, Position, null, Color.Cyan, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
-            else if(animationFrame == 1)spriteBatch.Draw(texture2, Position, null, Color.Cyan, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
-            else spriteBatch.Draw(texture1, Position, null, Color.Cyan, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
+            if(animationFrame == 0)spriteBatch.Draw(texture, Position, null, Color.Red, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
+            else if(animationFrame == 1)spriteBatch.Draw(texture2, Position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
+            else spriteBatch.Draw(texture1, Position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
         }
     }
 }

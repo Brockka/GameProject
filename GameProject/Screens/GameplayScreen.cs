@@ -8,7 +8,6 @@ using GameProject.StateManagement;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System.Diagnostics;
-using GameProject.ParticleSystem;
 
 namespace GameProject.Screens
 {
@@ -26,6 +25,7 @@ namespace GameProject.Screens
         private double score;
         private SpriteFont bangers;
         private Song backgroundMusic;
+        private Texture2D _background;
 
         private readonly Random _random = new Random();
 
@@ -67,6 +67,7 @@ namespace GameProject.Screens
             bangers = _content.Load<SpriteFont>("bangers");
             deathSound = _content.Load<SoundEffect>("DeathAudio");
             backgroundMusic = _content.Load<Song>("BackgroundMusic");
+            _background = _content.Load<Texture2D>("ScrollingBackground");
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(backgroundMusic);
             _timer = new Stopwatch();
@@ -135,6 +136,12 @@ namespace GameProject.Screens
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 0, 0);
 
             var spriteBatch = ScreenManager.SpriteBatch;
+
+            float scrollSpeed = (float)_timer.Elapsed.TotalSeconds * -15.0f;
+            Matrix transform = Matrix.CreateTranslation(scrollSpeed, 0, 0);
+            spriteBatch.Begin(transformMatrix: transform);
+            spriteBatch.Draw(_background, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, 2.5f, SpriteEffects.None,0);
+            spriteBatch.End();
 
             spriteBatch.Begin();
             foreach (var obstacle in obstacles) obstacle.Draw(gameTime, spriteBatch);
