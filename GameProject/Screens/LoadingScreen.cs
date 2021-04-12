@@ -28,7 +28,7 @@ namespace GameProject.Screens
             _loadingIsSlow = loadingIsSlow;
             _screensToLoad = screensToLoad;
 
-            TransitionOnTime = TimeSpan.FromSeconds(1);
+            TransitionOnTime = TimeSpan.FromSeconds(4);
         }
 
         // Activates the loading screen.
@@ -90,19 +90,23 @@ namespace GameProject.Screens
                 var spriteBatch = ScreenManager.SpriteBatch;
                 var font = ScreenManager.Font;
 
-                const string message = "Loading...";
+                const string message = "Try to not get hit by fireballs";
+                const string message2 = "Use WASD or arrow keys to move";
 
                 // Center the text in the viewport.
                 var viewport = ScreenManager.GraphicsDevice.Viewport;
                 var viewportSize = new Vector2(viewport.Width, viewport.Height);
                 var textSize = font.MeasureString(message);
                 var textPosition = (viewportSize - textSize) / 2;
+                var textSize2 = font.MeasureString(message2);
+                var textPosition2 = (viewportSize - textSize2 - Vector2.UnitY*200) / 2;
 
-                var color = Color.White * TransitionAlpha;
+                var color = Color.Red * TransitionAlpha;
 
                 // Draw the text.
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, message, textPosition, color);
+                spriteBatch.DrawString(font, message2, textPosition2, color);
                 spriteBatch.End();
             }
         }
