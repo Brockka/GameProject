@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using GameProject.Collisions;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameProject
 {
@@ -28,24 +29,31 @@ namespace GameProject
 
         private bool flipped;
 
+        private SoundEffect _movementSound;
+
         public Vector2 Position { get; private set; } = new Vector2(600, 200);
 
-        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200, 200), 55, 60);
+        private BoundingRectangle _bounds = new BoundingRectangle(new Vector2(200, 200), 50, 55);
 
-        private GraphicsDevice graphics;
+        private GraphicsDevice _graphics;
+
+        private Color _color;
+
+        private bool _moving;
 
         /// <summary>
         /// Bounding volume of the sprite
         /// </summary>
-        public BoundingRectangle Bounds => bounds;
+        public BoundingRectangle Bounds => _bounds;
 
         /// <summary>
         /// Creates Player sprite
         /// </summary>
         /// <param name="graphics">The graphics device</param>
-        public PlayerSprite(GraphicsDevice graphics)
+        public PlayerSprite(GraphicsDevice graphics, SoundEffect sound)
         {
-            this.graphics = graphics;
+            this._graphics = graphics;
+            _movementSound = sound;
         }
 
         /// <summary>
@@ -66,35 +74,34 @@ namespace GameProject
         public void Update(GameTime gameTime)
         {
             keyboardState = Keyboard.GetState();
-
-            if (Position.X < graphics.Viewport.X
-                || Position.X > graphics.Viewport.Width - 64)
-            {
-                
-            }
-
-            if (Position.Y < graphics.Viewport.Y
-                || Position.Y > graphics.Viewport.Height - 64)
-            {
-                
-            }
+            _moving = false;
 
             // Apply keyboard movement
-            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && Position.Y > graphics.Viewport.Y) Position += new Vector2(0, -5);
-            if ((keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) && Position.Y < graphics.Viewport.Height) Position += new Vector2(0, 5);
-            if ((keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && Position.X > graphics.Viewport.X)
+            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && Position.Y > _graphics.Viewport.Y + 27)
+            {
+                Position += new Vector2(0, -5);
+                _moving = true;
+            }
+            if ((keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) && Position.Y < _graphics.Viewport.Height - 27)
+            {
+                Position += new Vector2(0, 5);
+                _moving = true;
+            }
+            if ((keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && Position.X > _graphics.Viewport.X + 25)
             {
                 Position += new Vector2(-5,0);
                 flipped = true;
+                _moving = true;
             }
-            if ((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)) && Position.X < graphics.Viewport.Width)
+            if ((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)) && Position.X < _graphics.Viewport.Width - 25)
             {
                 Position += new Vector2(5, 0);
                 flipped = false;
+                _moving = true;
             }
             // Update the bounds
-            bounds.X = Position.X - 16;
-            bounds.Y = Position.Y - 16;
+            _bounds.X = Position.X - 16;
+            _bounds.Y = Position.Y - 16;
         }            
 
         /// <summary>
@@ -106,17 +113,22 @@ namespace GameProject
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
-
             if (animationTimer > ANIMATION_SPEED)
             {
-                animationFrame++;
-                if (animationFrame > 3) animationFrame = 0;
+                if (_moving)
+                {
+                    _color = Color.Cyan;
+                    animationFrame++;
+                    if (animationFrame > 3) animationFrame = 0;
+                    _movementSound.Play();
+                }
+                else _color = Color.LightBlue;  
                 animationTimer -= ANIMATION_SPEED;
                 
             }         
-            if(animationFrame == 0)spriteBatch.Draw(texture, Position, null, Color.Red, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
-            else if(animationFrame == 1)spriteBatch.Draw(texture2, Position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
-            else spriteBatch.Draw(texture1, Position, null, Color.Red, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
+            if(animationFrame == 0)spriteBatch.Draw(texture, Position, null, _color, 0, new Vector2(64,64), 0.5f, spriteEffects, 0);
+            else if(animationFrame == 1)spriteBatch.Draw(texture2, Position, null, _color, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
+            else spriteBatch.Draw(texture1, Position, null, _color, 0, new Vector2(64, 64), 0.5f, spriteEffects, 0);
         }
     }
 }

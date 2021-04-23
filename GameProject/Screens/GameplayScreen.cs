@@ -17,14 +17,15 @@ namespace GameProject.Screens
         private const int OBSTACLE_COUNT = 10;
         private ContentManager _content;
 
-        private SoundEffect deathSound;
+        private SoundEffect _deathSound;
+        private SoundEffect _movementSound;
 
-        private ObstacleSprite[] obstacles;
-        private PlayerSprite playerSprite;
+        private ObstacleSprite[] _obstacles;
+        private PlayerSprite _playerSprite;
         private Stopwatch _timer;
         private double score;
-        private SpriteFont bangers;
-        private Song backgroundMusic;
+        private SpriteFont _bangers;
+        private Song _backgroundMusic;
         private Texture2D _background;
 
         private readonly Random _random = new Random();
@@ -51,25 +52,28 @@ namespace GameProject.Screens
             Vector2 position = new Vector2(0,0);
             System.Random random = new System.Random();
 
-            playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice);
-            obstacles = new ObstacleSprite[OBSTACLE_COUNT];
+            _bangers = _content.Load<SpriteFont>("bangers");
+            _deathSound = _content.Load<SoundEffect>("DeathAudio");
+            _movementSound = _content.Load<SoundEffect>("Movement");
+            _backgroundMusic = _content.Load<Song>("BackgroundMusic");
+            _background = _content.Load<Texture2D>("ScrollingBackground");
+
+            _playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice, _movementSound);
+            _obstacles = new ObstacleSprite[OBSTACLE_COUNT];
             for (int i = 0; i < OBSTACLE_COUNT; i++)
             {
                 Vector2 velocity = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
                 velocity.Normalize();
                 velocity *= 200;
-                obstacles[i] = new ObstacleSprite(velocity, position, ScreenManager.GraphicsDevice, ScreenManager.Game);
+                _obstacles[i] = new ObstacleSprite(velocity, position, ScreenManager.GraphicsDevice, ScreenManager.Game);
 
             }
 
-            playerSprite.LoadContent(_content);
-            foreach (var obstacle in obstacles) obstacle.LoadContent(_content);
-            bangers = _content.Load<SpriteFont>("bangers");
-            deathSound = _content.Load<SoundEffect>("DeathAudio");
-            backgroundMusic = _content.Load<Song>("BackgroundMusic");
-            _background = _content.Load<Texture2D>("ScrollingBackground");
+            _playerSprite.LoadContent(_content);
+            foreach (var obstacle in _obstacles) obstacle.LoadContent(_content);
+            
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.Play(_backgroundMusic);
             _timer = new Stopwatch();
             _timer.Start();
 
@@ -106,11 +110,11 @@ namespace GameProject.Screens
 
             if (IsActive)
             {
-                    playerSprite.Update(gameTime);
-                    foreach (var obstacle in obstacles)
+                    _playerSprite.Update(gameTime);
+                    foreach (var obstacle in _obstacles)
                     {
                         obstacle.Update(gameTime);
-                        if (obstacle.Bounds.CollidesWith(playerSprite.Bounds))
+                        if (obstacle.Bounds.CollidesWith(_playerSprite.Bounds))
                         {
                         ScreenManager.ToggleSparks();
                         score = _timer.Elapsed.TotalSeconds;
@@ -119,10 +123,10 @@ namespace GameProject.Screens
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
                         ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);
-                        ScreenManager.Flash(playerSprite.Position);
-                        ScreenManager.Flash(playerSprite.Position);
-                        ScreenManager.Flash(playerSprite.Position);
-                        deathSound.Play();
+                        ScreenManager.Flash(_playerSprite.Position);
+                        ScreenManager.Flash(_playerSprite.Position);
+                        ScreenManager.Flash(_playerSprite.Position);
+                        _deathSound.Play();
                         MediaPlayer.Pause();
                         break;
                         }
@@ -144,9 +148,9 @@ namespace GameProject.Screens
             spriteBatch.End();
 
             spriteBatch.Begin();
-            foreach (var obstacle in obstacles) obstacle.Draw(gameTime, spriteBatch);
-            playerSprite.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, (Math.Round(_timer.Elapsed.TotalSeconds, 2)).ToString(),
+            foreach (var obstacle in _obstacles) obstacle.Draw(gameTime, spriteBatch);
+            _playerSprite.Draw(gameTime, spriteBatch);
+            spriteBatch.DrawString(_bangers, (Math.Round(_timer.Elapsed.TotalSeconds, 2)).ToString(),
                 new Vector2(2, 2), Color.White);
             spriteBatch.End();
 

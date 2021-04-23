@@ -22,3 +22,5 @@ Content/explosionBlue.png - modified Content/explosion.png by Brock Kaufmann
 
 Content/ScrollingBackground.png - created by Brock Kaufmann for this project
 
+Content/Movement.wav - created by Brock Kaufmann for this project
+

@@ -42,7 +42,7 @@ namespace GameProject
             this.Velocity = velocity;
             this.Position = position;
             this.graphics = graphics;
-            this.bounds = new BoundingCircle(position + new Vector2(16, 16), 20);
+            this.bounds = new BoundingCircle(position + new Vector2(16, 16), 16);
             fire = new FireParticleSystem(game, this);
             game.Components.Add(fire);
         }
@@ -79,12 +79,12 @@ namespace GameProject
             }
 
             if (Position.Y < graphics.Viewport.Y
-                || Position.Y > graphics.Viewport.Height)
+                || Position.Y + 16 > graphics.Viewport.Height)
             {
                 Velocity = new Vector2(Velocity.X, -Velocity.Y);
             }
             //Update the bounds
-            bounds.Center = new Vector2(Position.X + 24, Position.Y + 30);
+            bounds.Center = new Vector2(Position.X + 16, Position.Y + 16);
         }
 
         /// <summary>

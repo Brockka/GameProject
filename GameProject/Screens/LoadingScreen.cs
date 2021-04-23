@@ -90,7 +90,7 @@ namespace GameProject.Screens
                 var spriteBatch = ScreenManager.SpriteBatch;
                 var font = ScreenManager.Font;
 
-                const string message = "Try to not get hit by fireballs";
+                const string message = "Try to avoid fireballs as long as possible";
                 const string message2 = "Use WASD or arrow keys to move";
 
                 // Center the text in the viewport.
