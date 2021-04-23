@@ -33,7 +33,7 @@ namespace GameProject
 
         public Vector2 Position { get; private set; } = new Vector2(600, 200);
 
-        private BoundingRectangle _bounds = new BoundingRectangle(new Vector2(200, 200), 50, 55);
+        private BoundingRectangle _bounds = new BoundingRectangle(new Vector2(200, 200), 55, 60);
 
         private GraphicsDevice _graphics;
 
@@ -77,23 +77,23 @@ namespace GameProject
             _moving = false;
 
             // Apply keyboard movement
-            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && Position.Y > _graphics.Viewport.Y + 27)
+            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && Position.Y > _graphics.Viewport.Y + 30)
             {
                 Position += new Vector2(0, -5);
                 _moving = true;
             }
-            if ((keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) && Position.Y < _graphics.Viewport.Height - 27)
+            if ((keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) && Position.Y < _graphics.Viewport.Height - 30)
             {
                 Position += new Vector2(0, 5);
                 _moving = true;
             }
-            if ((keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && Position.X > _graphics.Viewport.X + 25)
+            if ((keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && Position.X > _graphics.Viewport.X + 27)
             {
                 Position += new Vector2(-5,0);
                 flipped = true;
                 _moving = true;
             }
-            if ((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)) && Position.X < _graphics.Viewport.Width - 25)
+            if ((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)) && Position.X < _graphics.Viewport.Width - 27)
             {
                 Position += new Vector2(5, 0);
                 flipped = false;

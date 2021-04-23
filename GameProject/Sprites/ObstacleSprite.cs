@@ -42,7 +42,7 @@ namespace GameProject
             this.Velocity = velocity;
             this.Position = position;
             this.graphics = graphics;
-            this.bounds = new BoundingCircle(position + new Vector2(16, 16), 16);
+            this.bounds = new BoundingCircle(position + new Vector2(16, 16), 18);
             fire = new FireParticleSystem(game, this);
             game.Components.Add(fire);
         }

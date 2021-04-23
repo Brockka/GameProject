@@ -19,6 +19,7 @@ namespace GameProject.Screens
 
         private SoundEffect _deathSound;
         private SoundEffect _movementSound;
+        private bool _newHighScore;
 
         private ObstacleSprite[] _obstacles;
         private PlayerSprite _playerSprite;
@@ -27,6 +28,8 @@ namespace GameProject.Screens
         private SpriteFont _bangers;
         private Song _backgroundMusic;
         private Texture2D _background;
+
+        private double _highScore;
 
         private readonly Random _random = new Random();
 
@@ -57,6 +60,7 @@ namespace GameProject.Screens
             _movementSound = _content.Load<SoundEffect>("Movement");
             _backgroundMusic = _content.Load<Song>("BackgroundMusic");
             _background = _content.Load<Texture2D>("ScrollingBackground");
+            _highScore = ScreenManager.HighScore;
 
             _playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice, _movementSound);
             _obstacles = new ObstacleSprite[OBSTACLE_COUNT];
@@ -118,11 +122,17 @@ namespace GameProject.Screens
                         {
                         ScreenManager.ToggleSparks();
                         score = _timer.Elapsed.TotalSeconds;
+                        if(_highScore < score)
+                        {
+                            _highScore = score;
+                            ScreenManager.WriteFile(_highScore);
+                        }
                         _timer.Reset();
                         for (int i = OBSTACLE_COUNT+2; i > 2 ; i--) ScreenManager.Game.Components.RemoveAt(i);
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
-                        ScreenManager.AddScreen(new DeathMenuScreen(Math.Round(score, 2).ToString()), null);
+                        if(!_newHighScore)ScreenManager.AddScreen(new DeathMenuScreen("Time survived: " + Math.Round(score, 2).ToString()), null);
+                        else ScreenManager.AddScreen(new DeathMenuScreen("New High Score: " + Math.Round(score, 2).ToString()), null);
                         ScreenManager.Flash(_playerSprite.Position);
                         ScreenManager.Flash(_playerSprite.Position);
                         ScreenManager.Flash(_playerSprite.Position);
@@ -150,8 +160,18 @@ namespace GameProject.Screens
             spriteBatch.Begin();
             foreach (var obstacle in _obstacles) obstacle.Draw(gameTime, spriteBatch);
             _playerSprite.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(_bangers, (Math.Round(_timer.Elapsed.TotalSeconds, 2)).ToString(),
-                new Vector2(2, 2), Color.White);
+            var textPositionX = ScreenManager.GraphicsDevice.Viewport.Width - ScreenManager.Font.MeasureString("High Score: XXXX").X - 2;
+            if (_newHighScore)
+            {
+                spriteBatch.DrawString(_bangers, Math.Round(_timer.Elapsed.TotalSeconds, 1).ToString(), new Vector2(2, 2), Color.Green);
+                spriteBatch.DrawString(_bangers, "High Score: " + Math.Round(_timer.Elapsed.TotalSeconds, 1), new Vector2(textPositionX, 2), Color.Green);
+            }
+             else
+            {
+                if (_highScore < _timer.Elapsed.TotalSeconds) _newHighScore = true;
+                spriteBatch.DrawString(_bangers, Math.Round(_timer.Elapsed.TotalSeconds, 1).ToString(), new Vector2(2, 2), Color.White);
+                spriteBatch.DrawString(_bangers, "High Score: " + Math.Round(_highScore, 1).ToString(), new Vector2(textPositionX, 2), Color.Yellow);
+            }              
             spriteBatch.End();
 
             // If the game is transitioning on or off, fade it out to black.

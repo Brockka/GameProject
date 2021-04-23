@@ -6,7 +6,7 @@ namespace GameProject.Screens
     // The main menu screen is the first thing displayed when the game starts up.
     public class DeathMenuScreen : MenuScreen
     {
-        public DeathMenuScreen(string score) : base("Time survived: " + score)
+        public DeathMenuScreen(string message) : base(message)
         {
             var playGameMenuEntry = new MenuEntry("Restart");
             var mainMenuEntry = new MenuEntry("Main Menu");

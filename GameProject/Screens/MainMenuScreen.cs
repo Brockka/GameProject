@@ -6,7 +6,7 @@ namespace GameProject.Screens
     // The main menu screen is the first thing displayed when the game starts up.
     public class MainMenuScreen : MenuScreen
     {
-        public MainMenuScreen() : base("")
+        public MainMenuScreen() : base("Ghost Fire")
         {
             var playGameMenuEntry = new MenuEntry("Play Game");
             var optionsMenuEntry = new MenuEntry("Options");
