@@ -11,8 +11,10 @@ namespace GameProject.Screens
 
         private readonly MenuEntry _musicSettings;
         private readonly MenuEntry _soundEffectSettings;
+        private readonly MenuEntry _difficultySettings;
 
         private static readonly string[] States = { "On", "Off" };
+        private static readonly string[] difficultyStates = { "Easy", "Medium", "Hard" };
         private static int _currentMusicState;
         private static int _currentEffectState;
 
@@ -20,6 +22,7 @@ namespace GameProject.Screens
         {
             _musicSettings = new MenuEntry(string.Empty);
             _soundEffectSettings = new MenuEntry(string.Empty);
+            _difficultySettings = new MenuEntry(string.Empty);
 
             SetMenuEntryText();
 
@@ -27,10 +30,12 @@ namespace GameProject.Screens
 
             _musicSettings.Selected += MusicMenuEntrySelected;
             _soundEffectSettings.Selected += SoundEffectMenuEntrySelected;
+            _difficultySettings.Selected += DifficultyMenuEntrySelected;
             back.Selected += OnCancel;
 
             MenuEntries.Add(_musicSettings);
             MenuEntries.Add(_soundEffectSettings);
+            MenuEntries.Add(_difficultySettings);
             MenuEntries.Add(back);
         }
 
@@ -39,6 +44,7 @@ namespace GameProject.Screens
         {
             _musicSettings.Text = $"Music: {States[_currentMusicState]}";
             _soundEffectSettings.Text = $"Sound Effects: {States[_currentEffectState]}";
+            _difficultySettings.Text = $"Difficulty: {difficultyStates[HighScores.Difficulty]}";
         }
 
         private void MusicMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -67,6 +73,23 @@ namespace GameProject.Screens
             {
                 SoundEffect.MasterVolume = 1.0f;
                 _currentEffectState = 0;
+            }
+            SetMenuEntryText();
+        }
+
+        private void DifficultyMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            if (HighScores.Difficulty == 0)
+            {
+                HighScores.Difficulty = 1;
+            }
+            else if (HighScores.Difficulty == 1)
+            {
+                HighScores.Difficulty = 2;
+            }
+            else
+            {
+                HighScores.Difficulty = 0;
             }
             SetMenuEntryText();
         }

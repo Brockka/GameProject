@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using GameProject.StateManagement;
+using Microsoft.Xna.Framework.Media;
 
 namespace GameProject.Screens
 {
@@ -20,7 +21,7 @@ namespace GameProject.Screens
 
         private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new GameplayScreen());
+            LoadingScreen.Load(ScreenManager, false, e.PlayerIndex, new GameplayScreen());           
         }
 
         private void MainMenuEntrySelected(object sender, PlayerIndexEventArgs e)

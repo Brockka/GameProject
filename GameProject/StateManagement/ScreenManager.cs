@@ -24,7 +24,6 @@ namespace GameProject.StateManagement
 
         private FlashParticleSystem _flash;
         private SparkParticleSystem _sparks;
-        private string _fileName = Directory.GetCurrentDirectory() + "\\Data.txt";
         public double HighScore { get; private set; } = 0.0;
 
         /// <summary>
@@ -57,7 +56,8 @@ namespace GameProject.StateManagement
         public override void Initialize()
         {
             base.Initialize();
-            ReadFile();
+            HighScores.ReadFile();
+            HighScores.Difficulty = 1;
             _isInitialized = true;
             _sparks = new SparkParticleSystem(Game, new Rectangle(-100, 500, 1000, 10));
             Game.Components.Add(_sparks);
@@ -215,34 +215,5 @@ namespace GameProject.StateManagement
         {
             _flash.PlaceFlash(position);
         }
-
-        private void ReadFile()
-        {
-            if (File.Exists(_fileName))
-            {
-                using (StreamReader sr = new StreamReader(_fileName))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        HighScore = double.Parse(sr.ReadLine());
-                    }
-                }
-            }
-            else
-            {
-                File.Create(_fileName).Close();
-            }
-        }
-        public void WriteFile(double score)
-        {
-            HighScore = score;
-            File.Delete(_fileName);
-            File.Create(_fileName).Close();
-            using (StreamWriter sw = new StreamWriter(_fileName))
-            {
-                sw.WriteLine(HighScore.ToString());
-            }
-        }
-
     }
 }

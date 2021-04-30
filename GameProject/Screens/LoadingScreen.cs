@@ -28,7 +28,8 @@ namespace GameProject.Screens
             _loadingIsSlow = loadingIsSlow;
             _screensToLoad = screensToLoad;
 
-            TransitionOnTime = TimeSpan.FromSeconds(4);
+            if (_loadingIsSlow) TransitionOnTime = TimeSpan.FromSeconds(4);
+            else TimeSpan.FromSeconds(2);
         }
 
         // Activates the loading screen.

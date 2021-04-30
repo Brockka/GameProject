@@ -14,7 +14,7 @@ namespace GameProject.Screens
     // This screen implements the actual game logic. 
     public class GameplayScreen : GameScreen
     {
-        private const int OBSTACLE_COUNT = 10;
+        private int _obstacleCount;
         private ContentManager _content;
 
         private SoundEffect _deathSound;
@@ -52,7 +52,7 @@ namespace GameProject.Screens
             if (this._content == null)
                 this._content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            Vector2 position = new Vector2(0,0);
+            Vector2 position = new Vector2(_random.Next(0,10), _random.Next(0, 10));
             System.Random random = new System.Random();
 
             _bangers = _content.Load<SpriteFont>("bangers");
@@ -60,16 +60,19 @@ namespace GameProject.Screens
             _movementSound = _content.Load<SoundEffect>("Movement");
             _backgroundMusic = _content.Load<Song>("BackgroundMusic");
             _background = _content.Load<Texture2D>("ScrollingBackground");
-            _highScore = ScreenManager.HighScore;
+            _highScore = HighScores.HighScoreArr[HighScores.Difficulty];
+            if (HighScores.Difficulty == 0) _obstacleCount = 5;
+            else if (HighScores.Difficulty == 1) _obstacleCount = 9;
+            else _obstacleCount = 12;
 
             _playerSprite = new PlayerSprite(ScreenManager.GraphicsDevice, _movementSound);
-            _obstacles = new ObstacleSprite[OBSTACLE_COUNT];
-            for (int i = 0; i < OBSTACLE_COUNT; i++)
+            _obstacles = new ObstacleSprite[_obstacleCount];
+            for (int i = 0; i < _obstacleCount; i++)
             {
                 Vector2 velocity = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
                 velocity.Normalize();
                 velocity *= 200;
-                _obstacles[i] = new ObstacleSprite(velocity, position, ScreenManager.GraphicsDevice, ScreenManager.Game);
+                _obstacles[i] = new ObstacleSprite(velocity, new Vector2(_random.Next(200), _random.Next(200)), ScreenManager.GraphicsDevice, ScreenManager.Game);
 
             }
 
@@ -125,10 +128,10 @@ namespace GameProject.Screens
                         if(_highScore < score)
                         {
                             _highScore = score;
-                            ScreenManager.WriteFile(_highScore);
+                            HighScores.WriteFile(_highScore);
                         }
                         _timer.Reset();
-                        for (int i = OBSTACLE_COUNT+2; i > 2 ; i--) ScreenManager.Game.Components.RemoveAt(i);
+                        for (int i = _obstacleCount+2; i > 2 ; i--) ScreenManager.Game.Components.RemoveAt(i);
                         ScreenManager.RemoveScreen(this);
                         ScreenManager.AddScreen(new BackgroundScreen(), null);
                         if(!_newHighScore)ScreenManager.AddScreen(new DeathMenuScreen("Time survived: " + Math.Round(score, 2).ToString()), null);

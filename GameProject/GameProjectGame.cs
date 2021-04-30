@@ -14,7 +14,6 @@ namespace GameProject
         private GraphicsDeviceManager _graphics;
         private readonly ScreenManager _screenManager;
 
-
         /// <summary>
         /// Constructs the game
         /// </summary>
